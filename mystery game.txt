@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The Halberg Assassination</title>
+<style>
+body {
+    background: #111;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+h1 {
+    color: gold;
+}
+button {
+    background: #333;
+    color: white;
+    border: 1px solid gold;
+    padding: 8px 12px;
+    margin: 5px 5px 5px 0;
+    cursor: pointer;
+}
+button:hover {
+    background: gold;
+    color: black;
+}
+#log {
+    margin-top: 20px;
+    padding: 10px;
+    background: #222;
+    min-height: 150px;
+}
+</style>
+</head>
+<body>
+
+<h1>The Halberg Assassination</h1>
+<p>You are Detective Rowan. Billionaire Victor Halberg was found dead in his mansion study at 9:00 PM.  
+Three people were inside the mansion.</p>
+
+<div id="choices"></div>
+<div id="log"></div>
+
+<script>
+const log = document.getElementById("log");
+const choices = document.getElementById("choices");
+
+let clues = [];
+
+const suspects = {
+    wife: {
+        name: "Elena Halberg (Wife)",
+        clue: "Elena's perfume was found in the study — but she claims she never entered."
+    },
+    butler: {
+        name: "James the Butler",
+        clue: "James had access to the security system and disabled cameras from 8:45 to 9:15."
+    },
+    partner: {
+        name: "Marcus Cole (Business Partner)",
+        clue: "Marcus stood to inherit millions after a recent contract dispute."
+    }
+};
+
+function showMainMenu() {
+    choices.innerHTML = `
+        <button onclick="investigate('wife')">Question Elena</button>
+        <button onclick="investigate('butler')">Question James</button>
+        <button onclick="investigate('partner')">Question Marcus</button>
+        <button onclick="accuse()">Make an Accusation</button>
+    `;
+}
+
+function investigate(person) {
+    if (!clues.includes(person)) {
+        clues.push(person);
+        log.innerHTML += "<p><strong>Clue Found:</strong> " + suspects[person].clue + "</p>";
+    } else {
+        log.innerHTML += "<p>You already questioned " + suspects[person].name + ".</p>";
+    }
+}
+
+function accuse() {
+    choices.innerHTML = `
+        <p>Who do you accuse?</p>
+        <button onclick="finalAccuse('wife')">Elena</button>
+        <button onclick="finalAccuse('butler')">James</button>
+        <button onclick="finalAccuse('partner')">Marcus</button>
+    `;
+}
+
+function finalAccuse(person) {
+    choices.innerHTML = "";
+    if (person === "butler") {
+        log.innerHTML += `
+        <h2 style="color:lightgreen;">Case Solved!</h2>
+        <p>You noticed James disabled the cameras during the exact time of death.
+        He used his access to sneak into the study and poison Victor's drink.
+        Motive? Victor planned to fire him after 20 years of service.</p>
+        `;
+    } else {
+        log.innerHTML += `
+        <h2 style="color:red;">Wrong Accusation!</h2>
+        <p>The real killer escapes while you arrest the wrong person.
+        The case remains unsolved.</p>
+        `;
+    }
+}
+
+showMainMenu();
+</script>
+
+</body>
+</html>
+
